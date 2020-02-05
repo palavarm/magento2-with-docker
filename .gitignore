@@ -1,0 +1,7 @@
+# Project files #
+######################
+.idea
+/html/magento2
+/html/.bash_history
+/html/.composer/
+docker-compose.yml
