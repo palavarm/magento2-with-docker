@@ -1,7 +1,7 @@
 # Magento 2 with Docker
 Basic Magento 2 Project works on LAMP and LEMP stacks with Docker
 
-###Installation Steps
+### Installation Steps
 **1. Create Services with Docker Containers**
 
 - copy docker-compose-{server-type}-{env}.yml to docker-compose.yml
