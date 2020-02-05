@@ -5,7 +5,7 @@ Basic Magento 2 Project works on LAMP and LEMP stacks with Docker
 **1. Create Services with Docker Containers**
 
 - copy docker-compose-{server-type}-{env}.yml to docker-compose.yml
-- if you first time create container then run `docker-compose up -d --build`
+- if you create containers for the first time then run `docker-compose up -d --build`
 - otherwise run `docker-compose up -d`
 
 **2. Create a Magento Open Source Project with Composer**
@@ -14,7 +14,7 @@ Basic Magento 2 Project works on LAMP and LEMP stacks with Docker
 - run this command to connect `docker exec -it magento2-php bash` 
 - cd html directory
 - run this command to create project `composer create-project --repository=https://repo.magento.com/ magento/project-community-edition magento2`
-- When Authentication required screen appears enter your keys to username and password areas
+- When prompted enter your magento public and private keys to username and password areas respectively
 - After project is created cd magento2 folder
 
 **3. Install Magento 2**
