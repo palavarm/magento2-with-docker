@@ -39,6 +39,7 @@ RUN docker-php-ext-configure \
   	intl \
   	mbstring \
   	pdo_mysql \
+  	sockets \
   	soap \
   	xsl \
   	zip
