@@ -1,0 +1,117 @@
+version: "3.8"
+
+networks:
+  magento2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.24.0.0/24
+
+services:
+  magento2-nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    image: magento2-nginx
+    container_name: magento2-nginx
+    networks:
+      - magento2
+    ports:
+      - 80:80
+    volumes:
+      - ./html:/var/www/html
+      - ./docker/nginx/sites-available:/etc/nginx/sites-available
+      - ./docker/nginx/logs:/var/log/nginx
+    depends_on:
+      - magento2-php
+      - magento2-mailhog
+    restart: always
+  magento2-php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: magento2-php
+    env_file:
+      - ./docker/env/.php.env
+    container_name: magento2-php
+    networks:
+      - magento2
+    ports:
+      - 5672:5672
+    depends_on:
+      - magento2-mysql
+      - magento2-elasticsearch
+    volumes:
+      - ./html:/var/www/html
+      - ./docker/php/php-fpm.ini:/usr/local/etc/php/php.ini
+  magento2-mysql:
+    platform: linux/x86_64
+    image: mysql:8
+    env_file:
+      - ./docker/env/.mysql.env
+    container_name: magento2-mysql
+    networks:
+      - magento2
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/custom.cnf:/etc/mysql/conf.d/mycustom.cnf
+  magento2-latest-redis:
+    build:
+      context: .
+      dockerfile: docker/redis/Dockerfile
+    image: magento2-redis
+    container_name: magento2-redis
+    networks:
+      - magento2
+    ports:
+      - "6379:6379"
+    depends_on:
+      - magento2-php
+    volumes:
+      - redis-data:/data
+  magento2-elasticsearch:
+    build:
+      context: .
+      dockerfile: docker/elasticsearch/Dockerfile
+    image: magento2-elasticsearch
+    container_name: magento2-elasticsearch
+    networks:
+      - magento2
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+  magento2-mailhog:
+    image: mailhog/mailhog:latest
+    networks:
+      - magento2
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+  elasticsearch-data:
+    driver: local
+  rabbitmq_data:
+    driver: local
