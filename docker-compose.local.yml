@@ -52,7 +52,7 @@ services:
        networks:
          - magento2
        ports:
-         - 3306:330
+         - 3306:3306
        volumes:
          - magento2-mysql:/var/lib/mysql
          - ./docker/mysql/custom.cnf:/etc/mysql/conf.d/mycustom.cnf
