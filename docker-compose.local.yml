@@ -50,7 +50,7 @@ services:
           - ./docker/.docker.env
        container_name: magento2-mysql
        networks:
-         - magento2
+         - magento
        ports:
          - 3306:3306
        volumes:
