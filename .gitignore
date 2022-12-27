@@ -1,4 +1,9 @@
 # Project files #
 ######################
 .idea
+/data/mysql/*
+!/data/mysql/sample-db-dump.sql
+/docker/nginx/logs/*
+/docker/nginx/sites-available/*
+!/docker/nginx/sites-available/magento2.com.conf.sample
 /html

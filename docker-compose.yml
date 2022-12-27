@@ -56,9 +56,10 @@ services:
     ports:
       - 3306:3306
     volumes:
+      - ./data/mysql:/home/data
       - mysql-data:/var/lib/mysql
       - ./docker/mysql/custom.cnf:/etc/mysql/conf.d/mycustom.cnf
-  magento2-latest-redis:
+  magento2-redis:
     build:
       context: .
       dockerfile: docker/redis/Dockerfile
